@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>沖繩自由行行程規劃</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Playfair+Display:wght@700&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ocean: #1a6b8a;
+      --ocean-light: #e8f4f8;
+      --ocean-mid: #4a9bb5;
+      --sand: #f5e6c8;
+      --sand-dark: #c4a96a;
+      --coral: #e07a5f;
+      --coral-light: #fdf0ec;
+      --green: #4a8c6f;
+      --green-light: #eaf3ee;
+      --text: #333333;
+      --text-muted: #666666;
+      --bg: #ffffff;
+      --bg2: #f8f9fa;
+      --border: #e9ecef;
+      --border-radius-md: 8px;
+      --border-radius-lg: 12px;
+    }
+
+    body { background: #f0f2f5; color: var(--text); font-family: 'Noto Sans TC', sans-serif; }
+
+    .wrap { padding: 1.5rem 0.5rem 2rem; max-width: 680px; margin: 0 auto; background: var(--bg); min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+
+    .header { text-align: center; margin-bottom: 2rem; }
+    .header h1 { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--text); letter-spacing: 0.5px; }
+    .header .sub { font-size: 13px; color: var(--text-muted); margin-top: 6px; }
+
+    .flight-bar { display: flex; gap: 8px; margin-bottom: 1.5rem; }
+    .flight-card { flex: 1; background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--border-radius-lg); padding: 12px 14px; cursor: pointer; transition: transform 0.18s; }
+    .flight-card:hover { transform: translateY(-2px); }
+    .flight-card .label { font-size: 11px; color: var(--text-muted); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+    .flight-card .label i { font-size: 14px; }
+    .flight-card .route { font-size: 14px; font-weight: 500; color: var(--text); }
+    .flight-card .time { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+    .flight-card .arrow { color: var(--ocean); }
+
+    .tools-row { display: flex; gap: 8px; margin-bottom: 1.8rem; }
+    .tool-btn { flex: 1; border: 0.5px solid var(--border); background: var(--bg); border-radius: var(--border-radius-md); padding: 10px 12px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text); font-family: 'Noto Sans TC', sans-serif; transition: background 0.15s, transform 0.15s; }
+    .tool-btn:hover { background: var(--bg2); transform: translateY(-1px); }
+    .tool-btn i { font-size: 18px; }
+    .tool-btn.map i { color: var(--ocean); }
+    .tool-btn.rate i { color: var(--sand-dark); }
+
+    .rate-panel { background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--border-radius-lg); padding: 14px 16px; margin-bottom: 1.5rem; display: none; }
+    .rate-panel.open { display: block; animation: fadeIn 0.25s; }
+    .rate-panel h3 { font-size: 14px; font-weight: 500; margin-bottom: 10px; color: var(--text); }
+    .rate-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .rate-label { font-size: 13px; color: var(--text-muted); }
+    .rate-big { font-size: 22px; font-weight: 700; color: var(--ocean); }
+    .rate-unit { font-size: 13px; color: var(--text-muted); }
+    .rate-input-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+    .rate-input-row label { font-size: 13px; color: var(--text-muted); }
+    .rate-input-row input { width: 100px; padding: 6px 10px; border: 0.5px solid var(--border); border-radius: var(--border-radius-md); background: var(--bg); color: var(--text); font-size: 14px; font-family: 'Noto Sans TC', sans-serif; }
+    .rate-result { font-size: 14px; font-weight: 500; color: var(--text); }
+
+    .days-nav { display: flex; gap: 6px; margin-bottom: 1.2rem; overflow-x: auto; padding-bottom: 2px; }
+    .day-tab { border: 0.5px solid var(--border); background: var(--bg); border-radius: 20px; padding: 7px 16px; font-size: 13px; cursor: pointer; color: var(--text-muted); font-family: 'Noto Sans TC', sans-serif; white-space: nowrap; transition: all 0.15s; }
+    .day-tab.active { background: var(--ocean); color: white; border-color: var(--ocean); font-weight: 500; }
+
+    .day-panel { display: none; animation: slideUp 0.3s ease; }
+    .day-panel.active { display: block; }
+
+    @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .day-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 1.2rem; }
+    .day-num { font-family: 'Playfair Display', serif; font-size: 36px; color: var(--ocean); line-height: 1; }
+    .day-title { font-size: 15px; font-weight: 500; color: var(--text); }
+    .day-date { font-size: 12px; color: var(--text-muted); }
+
+    .stops { display: flex; flex-direction: column; gap: 0; }
+    .stop-item { display: flex; gap: 0; }
+    .stop-line { display: flex; flex-direction: column; align-items: center; width: 40px; flex-shrink: 0; }
+    .stop-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--ocean); background: var(--bg); margin-top: 16px; flex-shrink: 0; transition: background 0.2s; }
+    .stop-dot.filled { background: var(--ocean); }
+    .stop-connector { flex: 1; width: 2px; background: var(--border); margin: 4px 0; }
+
+    .transit-bubble { display: flex; align-items: center; gap: 6px; padding: 4px 10px; background: var(--bg2); border-radius: 20px; font-size: 11px; color: var(--text-muted); margin: 4px 0 4px 40px; border: 0.5px solid var(--border); width: fit-content; }
+    .transit-bubble i { font-size: 14px; }
+
+    .stop-card { flex: 1; background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--border-radius-lg); padding: 12px 14px; margin: 8px 0 4px; cursor: pointer; transition: transform 0.18s, border-color 0.18s; }
+    .stop-card:hover { transform: translateX(3px); border-color: var(--ocean-mid); }
+    .stop-card .name { font-size: 14px; font-weight: 500; color: var(--text); display: flex; align-items: center; gap: 6px; }
+    .stop-card .name i { font-size: 16px; color: var(--ocean); }
+    .stop-card .desc { font-size: 12px; color: var(--text-muted); margin-top: 5px; line-height: 1.6; }
+    .stop-card .tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 7px; }
+    .stop-card .tag { font-size: 11px; padding: 2px 8px; border-radius: 10px; }
+    .tag.food { background: var(--coral-light); color: #b85c3e; }
+    .tag.nature { background: var(--green-light); color: var(--green); }
+    .tag.culture { background: var(--ocean-light); color: var(--ocean); }
+    .tag.shop { background: var(--sand); color: #8a6a20; }
+    .tag.aqua { background: #e8f0fb; color: #3a5a9e; }
+    .tag.night { background: #f3eef8; color: #6a4a8e; }
+
+    .meal-hint { display: flex; align-items: flex-start; gap: 8px; background: var(--coral-light); border: 0.5px solid #f0c4b4; border-radius: var(--border-radius-md); padding: 10px 12px; margin: 10px 0; }
+    .meal-hint i { font-size: 16px; color: var(--coral); flex-shrink: 0; margin-top: 2px; }
+    .meal-hint .text { font-size: 12px; color: #b85c3e; line-height: 1.6; }
+    .meal-hint strong { font-weight: 500; }
+
+    .charter-note { display: flex; align-items: flex-start; gap: 8px; background: #fff8e1; border: 0.5px solid #f0d87e; border-radius: var(--border-radius-md); padding: 10px 12px; margin-bottom: 12px; }
+    .charter-note i { font-size: 16px; color: #b8922a; flex-shrink: 0; margin-top: 2px; }
+    .charter-note .text { font-size: 12px; color: #7a5e0e; line-height: 1.6; }
+
+    .map-link { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--ocean); margin-top: 6px; text-decoration: none; cursor: pointer; }
+    .map-link:hover { text-decoration: underline; }
+
+    .summary-bar { display: flex; gap: 8px; margin-top: 1.5rem; flex-wrap: wrap; }
+    .sum-card { flex: 1; min-width: 100px; background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--border-radius-md); padding: 10px 12px; text-align: center; }
+    .sum-card .sv { font-size: 18px; font-weight: 500; color: var(--ocean); }
+    .sum-card .sl { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+
+    /* --- AI 助手樣式定義 --- */
+    .ai-assistant-container { position: fixed; bottom: 24px; right: 24px; z-index: 1000; font-family: 'Noto Sans TC', sans-serif; }
+    
+    /* 懸浮按鈕 */
+    .ai-trigger-btn { width: 56px; height: 56px; border-radius: 50%; background: var(--ocean); color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(26,107,138,0.3); transition: transform 0.2s, background 0.2s; }
+    .ai-trigger-btn:hover { transform: scale(1.05); background: var(--ocean-mid); }
+    .ai-trigger-btn i { font-size: 26px; }
+
+    /* 對話視窗 */
+    .ai-chat-window { position: absolute; bottom: 70px; right: 0; width: 350px; height: 480px; background: white; border-radius: var(--border-radius-lg); box-shadow: 0 6px 24px rgba(0,0,0,0.15); border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; opacity: 0; transform: translateY(10px) scale(0.95); pointer-events: none; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+    .ai-chat-window.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+
+    /* 視窗頭部 */
+    .ai-chat-header { background: var(--ocean); color: white; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; }
+    .ai-chat-header .title { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; }
+    .ai-chat-header .close-btn { background: transparent; border: none; color: white; cursor: pointer; font-size: 18px; opacity: 0.8; }
+    .ai-chat-header .close-btn:hover { opacity: 1; }
+
+    /* 對話內容區 */
+    .ai-chat-messages { flex: 1; padding: 14px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #fdfdfd; }
+    .msg-bubble { max-width: 85%; padding: 10px 12px; font-size: 13px; line-height: 1.5; border-radius: 12px; }
+    .msg-bubble.ai { background: var(--ocean-light); color: #2c5261; align-self: flex-start; border-top-left-radius: 2px; }
+    .msg-bubble.user { background: var(--sand); color: #614d23; align-self: flex-end; border-top-right-radius: 2px; }
+
+    /* 快捷推薦問題 */
+    .ai-suggestions { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 14px; background: #ffffff; border-top: 1px solid #f1f3f5; }
+    .suggest-tag { font-size: 11px; padding: 5px 10px; background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
+    .suggest-tag:hover { background: var(--ocean-light); color: var(--ocean); border-color: var(--ocean-mid); }
+
+    /* 輸入框區域 */
+    .ai-chat-input-row { display: flex; padding: 10px 14px; background: white; border-top: 1px solid var(--border); gap: 8px; align-items: center; }
+    .ai-chat-input-row input { flex: 1; border: 1px solid var(--border); padding: 8px 12px; font-size: 13px; border-radius: var(--border-radius-md); font-family: inherit; outline: none; }
+    .ai-chat-input-row input:focus { border-color: var(--ocean-mid); }
+    .ai-chat-input-row .send-btn { background: var(--ocean); color: white; border: none; width: 34px; height: 34px; border-radius: var(--border-radius-md); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
+    .ai-chat-input-row .send-btn:hover { background: var(--ocean-mid); }
+  </style>
+</head>
+<body>
+
+<div class="wrap">
+  <h2 style="display:none;">台北沖繩自由行行程規劃，10月16日至19日，Day 2、Day 3均為包車。</h2>
+
+  <div class="header">
+    <h1>🌺 沖繩自由行</h1>
+    <div class="sub">2024年 10月16日 — 10月19日・4天3夜</div>
+  </div>
+
+  <div class="flight-bar">
+    <div class="flight-card" onclick="openMap('桃園國際機場')">
+      <div class="label"><i class="ti ti-plane-departure" aria-hidden="true"></i>去程</div>
+      <div class="route">🇹🇼 台北 <span class="arrow">→</span> 🇯🇵 沖繩</div>
+      <div class="time">10/16・13:30 出發 → 15:55 抵達</div>
+    </div>
+    <div class="flight-card" onclick="openMap('那霸空港')">
+      <div class="label"><i class="ti ti-plane-arrival" aria-hidden="true"></i>回程</div>
+      <div class="route">🇯🇵 沖繩 <span class="arrow">→</span> 🇹🇼 台北</div>
+      <div class="time">10/19・16:55 出發 → 17:30 抵達</div>
+    </div>
+  </div>
+
+  <div class="tools-row">
+    <button class="tool-btn map" onclick="openMap('沖縄')"><i class="ti ti-map-pin" aria-hidden="true"></i>在 Google Maps 搜尋景點</button>
+    <button class="tool-btn rate" onclick="toggleRate()"><i class="ti ti-currency-yen" aria-hidden="true"></i>台幣 ↔ 日圓換算</button>
+  </div>
+
+  <div class="rate-panel" id="ratePanel">
+    <h3>即時匯率參考</h3>
+    <div class="rate-row">
+      <span class="rate-label">1 TWD ≈</span>
+      <span class="rate-big" id="rateNum">4.65</span>
+      <span class="rate-unit">JPY</span>
+      <span class="rate-label" style="margin-left:8px">（即時匯率，僅供參考）</span>
+    </div>
+    <div class="rate-input-row">
+      <label>台幣</label>
+      <input type="number" id="twdInput" value="1000" oninput="calcRate()" />
+      <span class="rate-label">≈</span>
+      <span class="rate-result" id="jpyResult">4,650 JPY</span>
+    </div>
+    <div class="rate-input-row">
+      <label>日圓</label>
+      <input type="number" id="jpyInput" value="" oninput="calcRateReverse()" placeholder="輸入日圓" />
+      <span class="rate-label">≈</span>
+      <span class="rate-result" id="twdResult">— TWD</span>
+    </div>
+  </div>
+
+  <div class="days-nav">
+    <button class="day-tab active" onclick="switchDay(0,this)">Day 1</button>
+    <button class="day-tab" onclick="switchDay(1,this)">Day 2 🚗</button>
+    <button class="day-tab" onclick="switchDay(2,this)">Day 3 🚗</button>
+    <button class="day-tab" onclick="switchDay(3,this)">Day 4</button>
+  </div>
+
+  <div id="day0" class="day-panel active">
+    <div class="day-header">
+      <div class="day-num">01</div>
+      <div>
+        <div class="day-title">國際通 ＋ 牧志市場</div>
+        <div class="day-date">10月16日（四）・抵達日</div>
+      </div>
+    </div>
+    <div class="meal-hint">
+      <i class="ti ti-tools-kitchen-2" aria-hidden="true"></i>
+      <div class="text"><strong>晚餐建議：</strong>牧志市場2樓食堂，可將1樓生鮮帶上去代為烹調，體驗最道地的市場海鮮文化！</div>
+    </div>
+    <div class="stops">
+      <div class="stop-item">
+        <div class="stop-line"><div class="stop-dot filled"></div><div class="stop-connector"></div></div>
+        <div class="stop-card" onclick="openMap('那霸空港')">
+          <div class="name"><i class="ti ti-plane-arrival" aria-hidden="true"></i>那霸空港抵達</div>
+          <div class="desc">15:55 落地，通關領行李後搭乘單軌電車（Yui Rail）前往國際通，約25分鐘。</div>
+          <div class="tags"><span class="tag culture">交通</span></div>
+          <a class="map-link" onclick="openMap('那霸空港')"><i class="ti ti-external-link"></i> Google Maps</a>
+        </div>
+      </div>
+      <div class="transit-bubble"><i class="ti ti-train" aria-hidden="true"></i>Yui Rail 旭橋站 → 牧志站，約12分鐘，¥270</div>
+      <div class="stop-item">
+        <div class="stop-line"><div class="stop-dot filled"></div><div class="stop-connector"></div></div>
+        <div class="stop-card" onclick="openMap('国際通り 那覇')">
+          <div class="name"><i class="ti ti-shopping-bag" aria-hidden="true"></i>國際通</div>
+          <div class="desc">沖繩最熱鬧商店街，約1.6公里。琉球玻璃、泡盛、黑糖、藍染伴手禮應有盡有，兩旁也有許多居酒屋與甜點店。</div>
+          <div class="tags"><span class="tag shop">購物</span><span class="tag food">美食</span><span class="tag culture">文化</span></div>
+          <a class="map-link" onclick="openMap('国際通り 那覇')"><i class="ti ti-external-link"></i> Google Maps</a>
+        </div>
+      </div>
+      <div class="transit-bubble"><i class="ti ti-walk" aria-hidden="true"></i>步行約5分鐘</div>
+      <div class="stop-item">
+        <div class="stop-line"><div class="stop-dot filled"></div></div>
+        <div class="stop-card" onclick="openMap('第一牧志公設市場')">
+          <div class="name"><i class="ti ti-fish" aria-hidden="true"></i>第一牧志公設市場</div>
+          <div class="desc">沖繩的「廚房」，1樓販售熱帶鮮魚、豬雜與蔬果，2樓食堂可將食材交給師傅現煮，感受在地漁港氣息。</div>
+          <div class="tags"><span class="tag food">市場</span><span class="tag culture">必訪</span></div>
+          <a class="map-link" onclick="openMap('第一牧志公設市場')"><i class="ti ti-external-link"></i> Google Maps</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="day1" class="day-panel">
+    <div class="day-header">
+      <div class="day-num">02</div>
+      <div>
+        <div class="day-title">北部一日遊</div>
+        <div class="day-date">10月17日（五）・包車行程</div>
+      </div>
+    </div>
+    <div class="charter-note">
+      <i class="ti ti-steering-wheel" aria-hidden="true"></i>
+      <div class="text"><strong>包車行程提醒：</strong>建議8:00出發，先往最北的古宇利島，南下接美麗海水族館，最後收在美國村看夕陽——由北到南順路，不走回頭路，效率最高。</div>
+    </div>
+    <div class="meal-hint">
+      <i class="ti ti-tools-kitchen-2" aria-hidden="true"></i>
+      <div class="text"><strong>午餐建議：</strong>美麗海水族館旁「Ocean Expo Park」可野餐，或於本部港附近享用沖繩麵（推薦きしもと食堂）。<strong>晚餐：</strong>美國村海堤旁的居酒屋或沖繩漢堡，邊等夕陽邊喝啤酒最對味。</div>
+    </div>
+    <div class="stops">
+      <div class="stop-item">
+        <div class="stop-line"><div class="stop-dot filled"></div><div class="stop-connector"></div></div>
+        <div class="stop-card" onclick="openMap('古宇利島 ハートロック')">
+          <div class="name"><i class="ti ti-heart" aria-hidden="true"></i>古宇利島・心形礁石</div>
+          <div class="desc">戀愛聖地，透明海水環繞的無費離島，過橋即達。建議早上9:00前抵達，人少視野清澈，在心形礁石前拍照後可沿海岸線散步。停留約1小時。</div>
+          <div class="tags"><span class="tag nature">自然</span><span class="tag culture">戀愛聖地</span></div>
+          <a class="map-link" onclick="openMap('古宇利島 ハートロック')"><i class="ti ti-external-link"></i> Google Maps</a>
+        </div>
+      </div>
+      <div class="transit-bubble"><i class="ti ti-steering-wheel" aria-hidden="true"></i>包車南下，約25–30分鐘</div>
+      <div class="stop-item">
+        <div class="stop-line"><div class="stop-dot filled"></div><div class="stop-connector"></div></div>
+        <div class="stop-card" onclick="openMap('沖縄美ら海水族館')">
+          <div class="name"><i class="ti ti-ripple" aria-hidden="true"></i>美麗海水族館</div>
+          <div class="desc">世界知名的「黑潮之海」超大壓克力水槽，可近距離欣賞鯨鯊與鬼蝠魟，震撼感十足。周邊海豚秀與海龜館也值得一看。建議停留2–2.5小時。</div>
+          <div class="tags"><span class="tag aqua">水族館</span><span class="tag culture">必訪</span></div>
+          <a class="map-link" onclick="openMap('沖縄美ら海水族館')"><i class="ti ti-external-link"></i> Google Maps</a>
+        </div>
+      </div>
+      <div class="transit-bubble"><i class="ti ti-steering-wheel" aria-hidden="true"></i>包車南下往美國村，約60–75分鐘（建議走沖繩自動車道）</div>
+      <div class="stop-item">
+        <div class="stop-line"><div class="stop-dot filled"></div></div>
+        <div class="stop-card" onclick="openMap('American Village 沖縄 北谷')">
+          <div class="name"><i class="ti ti-sunset-2" aria-hidden="true"></i>美國村看夕陽</div>
+          <div class="desc">充滿美式復古風情的購物園區，西向面海，是沖繩本島欣賞夕陽最佳地點之一。建議16:30抵達，逛街購物後沿海堤等待落日。附近摩天輪可俯瞰全景。</div>
+          <div class="tags"><span class="tag shop">購物</span><span class="tag night">夕陽必拍</span></div>
+          <a class="map-link" onclick="openMap('アメリカンビレッジ 北谷')"><i class="ti ti-external-link"></i> Google Maps</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="day2" class="day-panel">
+    <div class="day-header">
+      <div class="day-num">03</div>
+      <div>
+        <div class="day-title">玉泉洞 ＋ DMM ＋ 瀨長島</div>
+        <div class="day-date">10月18日（六）・包車行程</div>
+      </div>
+    </div>
+    <div class="charter-note">
+      <i class="ti ti-steering-wheel" aria-hidden="true"></i>
+      <div class="text"><strong>包車行程提醒：</strong>三站均在南部，建議玉泉洞（早上涼爽人少）→ 午餐 → DMM → 瀨長島（傍晚最美），讓最後一站剛好搭上飛機降落＋夕陽黃金時段。</div>
+    </div>
+    <div class="meal-hint">
+      <i class="ti ti-tools-kitchen-2" aria-hidden="true"></i>
+      <div class="text"><strong>午餐建議：</strong>玉泉洞旁「王國村」有琉球傳統料理套餐，氛圍悠閒。<strong>晚餐：</strong>瀨長島 Umikaji Terrace 多家輕食餐廳，邊看飛機降落邊用餐，浪漫感十足。</div>
+    </div>
+    <div class="stops">
+      <div class="stop-item">
+        <div class="stop-line"><div class="stop-dot filled"></div><div class="stop-connector"></div></div>
+        <div class="stop-card" onclick="openMap('玉泉洞 南城市')">
+          <div class="name"><i class="ti ti-cave" aria-hidden="true"></i>玉泉洞</div>
+          <div class="desc">沖繩最大鐘乳石洞，全長5公里，開放段約890公尺。石筍林立、地底湖泊，燈光映照下如夢似幻。早上前往溫度涼爽，人潮也少。停留約1.5小時。</div>
+          <div class="tags"><span class="tag nature">自然奇景</span><span class="tag culture">世界級</span></div>
+          <a class="map-link" onclick="openMap('玉泉洞 南城市')"><i class="ti ti-external-link"></i> Google Maps</a>
+        </div>
+      </div>
+      <div class="transit-bubble"><i class="ti ti-steering-wheel" aria-hidden="true"></i>包車往 DMM，約30分鐘</div>
+      <div class="stop-item">
+        <div class="stop-line"><div class="stop-dot filled"></div><div class="stop-connector"></div></div>
+        <div class="stop-card" onclick="openMap('DMMかりゆし水族館 豊崎')">
+          <div class="name"><i class="ti ti-fish" aria-hidden="true"></i>DMM Kariyushi Aquarium</div>
+          <div class="desc">沉浸式科技水族館，超大懸掛魚缸與互動投影是最大亮點，與美麗海風格截然不同，更具藝術體驗感。適合拍照打卡。停留約1.5小時。</div>
+          <div class="tags"><span class="tag aqua">水族館</span><span class="tag night">藝術體驗</span></div>
+          <a class="map-link" onclick="openMap('DMMかりゆし水族館 豊崎')"><i class="ti ti-external-link"></i> Google Maps</a>
+        </div>
+      </div>
+      <div class="transit-bubble"><i class="ti ti-steering-wheel" aria-hidden="true"></i>包車往瀨長島，約15分鐘</div>
+      <div class="stop-item">
+        <div class="stop-line"><div class="stop-dot filled"></div></div>
+        <div class="stop-card" onclick="openMap('瀬長島ウミカジテラス')">
+          <div class="name"><i class="ti ti-plane" aria-hidden="true"></i>瀨長島 Umikaji Terrace</div>
+          <div class="desc">白色地中海風格商店群，緊鄰那霸機場跑道，可近距離欣賞飛機低空降落剪影配上夕陽，是沖繩最有特色的傍晚景點。建議17:00後抵達，留至日落。</div>
+          <div class="tags"><span class="tag shop">餐廳</span><span class="tag night">夕陽</span><span class="tag culture">IG熱點</span></div>
+          <a class="map-link" onclick="openMap('瀬長島ウミカジテラス')"><i class="ti ti-external-link"></i> Google Maps</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="day3" class="day-panel">
+    <div class="day-header">
+      <div class="day-num">04</div>
+      <div>
+        <div class="day-title">iias ／ Outlet 購物</div>
+        <div class="day-date">10月19日（日）・出發日，16:55 返台</div>
+      </div>
+    </div>
+    <div class="meal-hint">
+      <i class="ti ti-tools-kitchen-2" aria-hidden="true"></i>
+      <div class="text"><strong>午餐建議：</strong>兩個商場美食街均有豐富選擇，Ashibinaa 的日式食堂CP值高。<strong>注意：</strong>記得預留13:30前抵達機場，辦理報到＋退稅＋免稅品採購。</div>
+    </div>
+    <div class="stops">
+      <div class="stop-item">
+        <div class="stop-line"><div class="stop-dot filled"></div><div class="stop-connector"></div></div>
+        <div class="stop-card" onclick="openMap('iias沖縄豊崎')">
+          <div class="name"><i class="ti ti-building-store" aria-hidden="true"></i>iias 沖繩豊崎</div>
+          <div class="desc">沖繩最新大型複合商場，緊鄰 DMM 水族館。品牌齊全、美食街豐富，是採購伴手禮最後衝刺的好地方。停留約1.5–2小時。</div>
+          <div class="tags"><span class="tag shop">購物</span><span class="tag food">美食街</span></div>
+          <a class="map-link" onclick="openMap('iias沖縄豊崎')"><i class="ti ti-external-link"></i> Google Maps</a>
+        </div>
+      </div>
+      <div class="transit-bubble"><i class="ti ti-walk" aria-hidden="true"></i>步行或接駁，兩者相距約5分鐘</div>
+      <div class="stop-item">
+        <div class="stop-line"><div class="stop-dot filled"></div><div class="stop-connector"></div></div>
+        <div class="stop-card" onclick="openMap('沖縄アウトレットモールあしびなー')">
+          <div class="name"><i class="ti ti-tag" aria-hidden="true"></i>沖繩 Outlet Mall Ashibinaa</div>
+          <div class="desc">沖繩唯一Outlet，Coach、Kate Spade、Samsonite、adidas 等品牌均有折扣。距機場僅10分鐘車程，是回程前最後掃貨的絕佳地點。</div>
+          <div class="tags"><span class="tag shop">Outlet</span><span class="tag culture">品牌折扣</span></div>
+          <a class="map-link" onclick="openMap('沖縄アウトレットモールあしびなー')"><i class="ti ti-external-link"></i> Google Maps</a>
+        </div>
+      </div>
+      <div class="transit-bubble"><i class="ti ti-car" aria-hidden="true"></i>Outlet → 那霸空港，約10分鐘</div>
+      <div class="stop-item">
+        <div class="stop-line"><div class="stop-dot filled"></div></div>
+        <div class="stop-card" onclick="openMap('那霸空港')">
+          <div class="name"><i class="ti ti-plane-departure" aria-hidden="true"></i>那霸空港・返台</div>
+          <div class="desc">建議13:30前抵達（起飛前3小時以上）辦理登機手續，入境側有免稅店可最後採買。16:55 出發，17:30 抵達台北桃園機場。</div>
+          <div class="tags"><span class="tag culture">返台</span></div>
+          <a class="map-link" onclick="openMap('那霸空港')"><i class="ti ti-external-link"></i> Google Maps</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary-bar">
+    <div class="sum-card"><div class="sv">4</div><div class="sl">天行程</div></div>
+    <div class="sum-card"><div class="sv">11</div><div class="sl">個景點</div></div>
+    <div class="sum-card"><div class="sv">Day 2–3</div><div class="sl">包車</div></div>
+    <div class="sum-card"><div class="sv">2</div><div class="sl">座水族館</div></div>
+  </div>
+</div>
+
+<div class="ai-assistant-container">
+  <div class="ai-chat-window" id="aiChatWindow">
+    <div class="ai-chat-header">
+      <div class="title"><i class="ti ti-message-chatbot"></i> 沖繩旅遊小助手</div>
+      <button class="close-btn" onclick="toggleAIChat()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="ai-chat-messages" id="aiChatMessages">
+      <div class="msg-bubble ai">
+        哈囉！我是你的沖繩旅遊小助手。我對你這次 10/16 - 10/19 的 4 天 3 夜行程非常了解囉！有任何關於包車、景點或美食的問題都可以問我 🌺
+      </div>
+    </div>
+    <div class="ai-suggestions">
+      <div class="suggest-tag" onclick="askPreset('推薦一下沖繩必吃美食？')">😋 推薦美食</div>
+      <div class="suggest-tag" onclick="askPreset('第2天和第3天包車有什麼要注意的？')">🚗 包車注意事項</div>
+      <div class="suggest-tag" onclick="askPreset('買伴手禮最後衝刺去哪裡好？')">🛍️ 購物推薦</div>
+    </div>
+    <div class="ai-chat-input-row">
+      <input type="text" id="aiInput" placeholder="請輸入您的問題..." onkeydown="if(event.key==='Enter') sendAIMessage()">
+      <button class="send-btn" onclick="sendAIMessage()"><i class="ti ti-send"></i></button>
+    </div>
+  </div>
+
+  <button class="ai-trigger-btn" onclick="toggleAIChat()">
+    <i class="ti ti-message-chatbot" id="aiBtnIcon"></i>
+  </button>
+</div>
+
+<script>
+const RATE = 4.65;
+window._rate = RATE;
+
+function switchDay(idx, el) {
+  document.querySelectorAll('.day-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('day' + idx).classList.add('active');
+  el.classList.add('active');
+}
+
+function toggleRate() {
+  const p = document.getElementById('ratePanel');
+  p.classList.toggle('open');
+  if (p.classList.contains('open')) fetchRate();
+}
+
+async function fetchRate() {
+  try {
+    const r = await fetch('https://open.er-api.com/v6/latest/TWD');
+    const d = await r.json();
+    if (d && d.rates && d.rates.JPY) {
+      window._rate = d.rates.JPY;
+      document.getElementById('rateNum').textContent = window._rate.toFixed(2);
+      calcRate();
+    }
+  } catch(e) {}
+}
+
+function calcRate() {
+  const twd = parseFloat(document.getElementById('twdInput').value) || 0;
+  document.getElementById('jpyResult').textContent = Math.round(twd * window._rate).toLocaleString() + ' JPY';
+}
+
+function calcRateReverse() {
+  const jpy = parseFloat(document.getElementById('jpyInput').value) || 0;
+  document.getElementById('twdResult').textContent = Math.round(jpy / window._rate).toLocaleString() + ' TWD';
+}
+
+function openMap(query) {
+  window.open('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(query), '_blank');
+}
+
+/* --- AI 助手互動邏輯控制 --- */
+function toggleAIChat() {
+  const win = document.getElementById('aiChatWindow');
+  const icon = document.getElementById('aiBtnIcon');
+  win.classList.toggle('open');
+  
+  if(win.classList.contains('open')) {
+    icon.className = "ti ti-chevron-down";
+  } else {
+    icon.className = "ti ti-message-chatbot";
+  }
+}
+
+function askPreset(question) {
+  appendMessage(question, 'user');
+  processAIResponse(question);
+}
+
+function sendAIMessage() {
+  const input = document.getElementById('aiInput');
+  const text = input.value.trim();
+  if(!text) return;
+  
+  appendMessage(text, 'user');
+  input.value = '';
+  processAIResponse(text);
+}
+
+function appendMessage(text, sender) {
+  const container = document.getElementById('aiChatMessages');
+  const bubble = document.createElement('div');
+  bubble.className = `msg-bubble ${sender}`;
+  bubble.innerText = text;
+  container.appendChild(bubble);
+  container.scrollTop = container.scrollHeight;
+}
+
+// 模擬 AI 根據行程 HTML 內的回覆邏輯
+function processAIResponse(query) {
+  let reply = "收到您的問題了！目前這是一個靜態展示網頁，若要對接正式的 AI API（如 OpenAI 或 Gemini），可以在後端或使用 API Key 串接喔！";
+  
+  if (query.includes('美食') || query.includes('吃')) {
+    reply = "根據您的行程，晚餐極度推薦去第一牧志公設市場的 2 樓食堂，可以現煮 1 樓買的海鮮！另外第 2 天去北部時，午餐推薦本部港附近的「きしもと食堂」享用道地沖繩麵；晚餐則可以在美國村海堤居酒屋邊看夕陽邊喝啤酒喔！🍻";
+  } else if (query.includes('包車') || query.includes('注意')) {
+    reply = "您的 Day 2 和 Day 3 是包車行程。Day 2 走北部，建議早上 8:00 就出發，一路最北往南玩（古宇利島 ➔ 美麗海 ➔ 美國村），順路不走回頭路。Day 3 走南部，玉泉洞排早上比較涼爽，傍晚剛好在瀨長島看飛機降落與黃金夕陽，時間最完美！";
+  } else if (query.includes('購物') || query.includes('伴手禮') || query.includes('買')) {
+    reply = "最後一天的伴手禮衝刺，行程裡排了最新大型複合商場「iias 沖繩豊崎」跟「Outlet Mall Ashibinaa」，兩家距離很近（車程/步行約5分鐘）。Outlet 離那霸機場只有 10 分鐘車程，非常適合在上飛機前做最後的折扣掃貨！不過記得要在 13:30 前到機場報到喔！";
+  }
+  
+  // 模擬思考延遲
+  setTimeout(() => {
+    appendMessage(reply, 'ai');
+  }, 400);
+}
+</script>
+
+</body>
+</html>
