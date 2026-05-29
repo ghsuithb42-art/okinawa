@@ -55,15 +55,17 @@
     .wx-card .wx-desc { font-size: 11px; color: var(--color-text-secondary); margin-top: 3px; }
     .wx-note { font-size: 13px; color: var(--color-text-secondary); margin-top: 12px; line-height: 1.7; padding-top: 12px; border-top: 0.5px solid var(--color-border-tertiary); }
 
-    .flights { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.5rem; }
-    @media (max-width: 480px) { .flights { grid-template-columns: 1fr; } }
-    .fl { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 13px 16px; cursor: pointer; transition: border-color 0.15s; text-decoration: none; display: block; }
-    .fl:hover { border-color: var(--color-border-secondary); }
-    .fl .fl-label { font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 7px; display: flex; align-items: center; gap: 5px; }
-    .fl .fl-label i { font-size: 14px; }
-    .fl .fl-route { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
-    .fl .fl-route span { color: #1d9e75; }
-    .fl .fl-time { font-size: 13px; color: var(--color-text-secondary); margin-top: 4px; }
+    /* 調整後的一體化航班樣式 */
+    .flights-row { display: grid; grid-template-columns: auto 1fr 1fr; gap: 16px; align-items: center; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 14px 18px; margin-bottom: 1.5rem; background: var(--color-background-primary); }
+    @media (max-width: 520px) { .flights-row { grid-template-columns: 1fr; gap: 12px; } .flight-logo { border-right: none !important; border-bottom: 0.5px solid var(--color-border-tertiary); padding-bottom: 8px; } }
+    .flight-logo { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding-right: 14px; border-right: 0.5px solid var(--color-border-tertiary); }
+    .flight-logo .carrier { font-size: 12px; font-weight: bold; color: #e21a22; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px; }
+    .flight-logo .sub { font-size: 10px; color: var(--color-text-secondary); margin-top: 2px; }
+    .fl-item-col { display: flex; flex-direction: column; }
+    .fl-item-col .fl-label { font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 4px; display: flex; align-items: center; gap: 5px; }
+    .fl-item-col .fl-route { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+    .fl-item-col .fl-route span { color: #1d9e75; }
+    .fl-item-col .fl-time { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
 
     .tools { display: flex; gap: 8px; margin-bottom: 1.8rem; }
     .tbtn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px; padding: 10px 14px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); background: none; color: var(--color-text-secondary); font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; transition: background 0.15s, color 0.15s; text-decoration: none; }
@@ -187,22 +189,26 @@
     <div class="wx-grid">
       <div class="wx-card"><div class="wx-day">10/16 抵達</div><div class="wx-ico">🌤</div><div class="wx-temp">27–31°C</div><div class="wx-desc">晴時多雲</div></div>
       <div class="wx-card"><div class="wx-day">10/17 北部</div><div class="wx-ico">⛅</div><div class="wx-temp">26–30°C</div><div class="wx-desc">多雲偶陣雨</div></div>
-      <div class="wx-card"><div class="wx-day">10/18 購物</div><div class="wx-ico">☀️</div><div class="wx-temp">25–29°C</div><div class="wx-desc">晴朗舒適</div></div>
-      <div class="wx-card"><div class="wx-day">10/19 南部</div><div class="wx-ico">🌤</div><div class="wx-temp">26–30°C</div><div class="wx-desc">晴，微風</div></div>
+      <div class="wx-card"><div class="wx-day">10/18 南部</div><div class="wx-ico">☀️</div><div class="wx-temp">25–29°C</div><div class="wx-desc">晴朗舒適</div></div>
+      <div class="wx-card"><div class="wx-day">10/19 購物</div><div class="wx-ico">🌤</div><div class="wx-temp">26–30°C</div><div class="wx-desc">晴，微風</div></div>
     </div>
     <div class="wx-note">10月沖繩仍屬夏末，均溫約26–30°C。紫外線強，防曬不可少；北部海岸風大，薄外套備用。</div>
   </div>
 
-  <div class="flights">
-    <div class="fl">
+  <div class="flights-row">
+    <div class="flight-logo">
+      <span class="carrier"><i class="ti ti-plane"></i>AirAsia</span>
+      <span class="sub">亞洲航空 Flights</span>
+    </div>
+    <div class="fl-item-col">
       <div class="fl-label"><i class="ti ti-plane-departure" aria-hidden="true"></i>去程</div>
       <div class="fl-route">台北 <span>→</span> 沖繩</div>
-      <div class="fl-time">10/16  13:30 → 15:55</div>
+      <div class="fl-time">10/16 13:30 → 15:55</div>
     </div>
-    <div class="fl">
+    <div class="fl-item-col">
       <div class="fl-label"><i class="ti ti-plane-arrival" aria-hidden="true"></i>回程</div>
       <div class="fl-route">沖繩 <span>→</span> 台北</div>
-      <div class="fl-time">10/19  16:55 → 17:30</div>
+      <div class="fl-time">10/19 16:55 → 17:30</div>
     </div>
   </div>
 
@@ -231,7 +237,7 @@
 
   <div class="panel active" id="p0">
     <div class="panel-header">
-      <div class="day-n">Day 1 · 10月16日（四）</div>
+      <div class="day-n">Day 1 · 10月16日（五）</div>
       <h2>國際通 · 牧志市場</h2>
       <div class="badge-row"><span class="badge">抵達日 15:55</span><span class="badge">Yui Rail 接駁</span></div>
     </div>
@@ -273,7 +279,7 @@
 
   <div class="panel" id="p1">
     <div class="panel-header">
-      <div class="day-n">Day 2 · 10月17日（五）</div>
+      <div class="day-n">Day 2 · 10月17日（六）</div>
       <h2>北部一日遊</h2>
       <div class="badge-row"><span class="badge charter">包車</span><span class="badge">由北往南順路</span><span class="badge">08:00 出發</span></div>
     </div>
@@ -315,22 +321,33 @@
 
   <div class="panel" id="p2">
     <div class="panel-header">
-      <div class="day-n">Day 3 · 10月18日（六）</div>
-      <h2>iias · Outlet 購物</h2>
-      <div class="badge-row"><span class="badge">計程車 / 自行前往</span><span class="badge">距機場 10 分鐘</span></div>
+      <div class="day-n">Day 3 · 10月18日（日）</div>
+      <h2>玉泉洞 · 瀨長島 · Outlet </h2>
+      <div class="badge-row"><span class="badge charter">包車</span><span class="badge">南部景點順路</span></div>
     </div>
     
     <div class="timeline">
       <div class="tl-item">
-        <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">10:00<br>12:00</div></div>
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">08:30<br>10:00</div></div>
         <div class="tl-card">
-          <div class="card-top"><div class="card-name"><i class="ti ti-building-store" aria-hidden="true"></i>iias 沖繩豐崎</div><span class="duration">2 小時</span></div>
-          <div class="card-desc">沖繩新型複合商場，品牌齊全、美食街豐富。緊鄰 DMM 水族館。</div>
-          <div class="card-footer"><div class="tags"><span class="tag shp">購物</span><span class="tag eat">商場</span></div><a href="https://www.google.com/maps/search/?api=1&query=iias沖繩豐崎" target="_blank" class="map-a"><i class="ti ti-map-pin"></i>地圖</a></div>
+          <div class="card-top"><div class="card-name"><i class="ti ti-mountain" aria-hidden="true"></i>沖繩世界文化王國・玉泉洞</div><span class="duration">1.5 小時</span></div>
+          <div class="card-desc">沖繩最大鐘乳石洞。石筍林立、地底湖泊，燈光映照如夢似幻。</div>
+          <div class="card-footer"><div class="tags"><span class="tag nat">自然</span><span class="tag cul">奇景</span></div><a href="https://www.google.com/maps/search/?api=1&query=沖繩玉泉洞" target="_blank" class="map-a"><i class="ti ti-map-pin"></i>地圖</a></div>
         </div>
       </div>
       <div class="tl-connector"><div class="tl-conn-left"><div class="tl-conn-line"></div></div></div>
-      <div class="tl-transit"><i class="ti ti-walk" aria-hidden="true"></i><span>步行或接駁，約5分鐘</span></div>
+      <div class="tl-transit"><i class="ti ti-steering-wheel" aria-hidden="true"></i><span>包車前往，約35分鐘</span></div>
+      <div class="tl-connector"><div class="tl-conn-left"><div class="tl-conn-line"></div></div></div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">10:45<br>12:30</div></div>
+        <div class="tl-card">
+          <div class="card-top"><div class="card-name"><i class="ti ti-plane" aria-hidden="true"></i>瀨長島 Umikaji Terrace</div><span class="duration">1.7 小時</span></div>
+          <div class="card-desc">純白地中海風商店街，可極近距離欣賞飛機起降，品嚐熱門美食。</div>
+          <div class="card-footer"><div class="tags"><span class="tag eat">觀景</span><span class="tag nat">熱門</span></div><a href="https://www.google.com/maps/search/?api=1&query=瀨長島Umikaji+Terrace" target="_blank" class="map-a"><i class="ti ti-map-pin"></i>地圖</a></div>
+        </div>
+      </div>
+      <div class="tl-connector"><div class="tl-conn-left"><div class="tl-conn-line"></div></div></div>
+      <div class="tl-transit"><i class="ti ti-steering-wheel" aria-hidden="true"></i><span>包車前往，約10分鐘</span></div>
       <div class="tl-connector"><div class="tl-conn-left"><div class="tl-conn-line"></div></div></div>
       <div class="tl-item">
         <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">13:00<br>15:30</div></div>
@@ -345,40 +362,29 @@
 
   <div class="panel" id="p3">
     <div class="panel-header">
-      <div class="day-n">Day 4 · 10月19日（日）· 回程 16:55</div>
-      <h2>玉泉洞 · DMM · 瀨長島</h2>
-      <div class="badge-row"><span class="badge charter">包車</span><span class="badge">南部三站順路</span><span class="badge">15:00 前往機場</span></div>
+      <div class="day-n">Day 4 · 10月19日（一）· 回程 16:55</div>
+      <h2>iias · DMM 水族館購物日</h2>
+      <div class="badge-row"><span class="badge">自行前往 / 計程車</span><span class="badge">距機場 10 分鐘</span><span class="badge">15:00 前往機場</span></div>
     </div>
     
     <div class="timeline">
       <div class="tl-item">
-        <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">08:30<br>10:00</div></div>
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">10:00<br>12:00</div></div>
         <div class="tl-card">
-          <div class="card-top"><div class="card-name"><i class="ti ti-mountain" aria-hidden="true"></i>沖繩世界文化王國・玉泉洞</div><span class="duration">1.5 小時</span></div>
-          <div class="card-desc">沖繩最大鐘乳石洞。石筍林立、地底湖泊，燈光映照如夢似幻。</div>
-          <div class="card-footer"><div class="tags"><span class="tag nat">自然</span><span class="tag cul">奇景</span></div><a href="https://www.google.com/maps/search/?api=1&query=沖繩玉泉洞" target="_blank" class="map-a"><i class="ti ti-map-pin"></i>地圖</a></div>
+          <div class="card-top"><div class="card-name"><i class="ti ti-building-store" aria-hidden="true"></i>iias 沖繩豐崎</div><span class="duration">2 小時</span></div>
+          <div class="card-desc">沖繩新型複合商場，品牌齊全、美食街豐富。緊鄰 DMM 水族館。</div>
+          <div class="card-footer"><div class="tags"><span class="tag shp">購物</span><span class="tag eat">商場</span></div><a href="https://www.google.com/maps/search/?api=1&query=iias沖繩豐崎" target="_blank" class="map-a"><i class="ti ti-map-pin"></i>地圖</a></div>
         </div>
       </div>
       <div class="tl-connector"><div class="tl-conn-left"><div class="tl-conn-line"></div></div></div>
-      <div class="tl-transit"><i class="ti ti-steering-wheel" aria-hidden="true"></i><span>包車前往，約30分鐘</span></div>
+      <div class="tl-transit"><i class="ti ti-walk" aria-hidden="true"></i><span>步行，約3分鐘</span></div>
       <div class="tl-connector"><div class="tl-conn-left"><div class="tl-conn-line"></div></div></div>
       <div class="tl-item">
-        <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">11:30<br>13:00</div></div>
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">12:00<br>13:35</div></div>
         <div class="tl-card">
           <div class="card-top"><div class="card-name"><i class="ti ti-fish" aria-hidden="true"></i>DMM Kariyushi 水族館</div><span class="duration">1.5 小時</span></div>
-          <div class="card-desc">沉浸式數位科技水族館，融合真實生物與互動投影。</div>
+          <div class="card-desc">沉浸式數位科技水族館，融合真實生物與互動投影，適合登機前的放鬆行程。</div>
           <div class="card-footer"><div class="tags"><span class="tag nat">水族館</span><span class="tag art">數位技術</span></div><a href="https://www.google.com/maps/search/?api=1&query=DMM+Kariyushi+水族館" target="_blank" class="map-a"><i class="ti ti-map-pin"></i>地圖</a></div>
-        </div>
-      </div>
-      <div class="tl-connector"><div class="tl-conn-left"><div class="tl-conn-line"></div></div></div>
-      <div class="tl-transit"><i class="ti ti-steering-wheel" aria-hidden="true"></i><span>包車前往，約15分鐘</span></div>
-      <div class="tl-connector"><div class="tl-conn-left"><div class="tl-conn-line"></div></div></div>
-      <div class="tl-item">
-        <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">13:15<br>15:00</div></div>
-        <div class="tl-card">
-          <div class="card-top"><div class="card-name"><i class="ti ti-plane" aria-hidden="true"></i>瀨長島 Umikaji Terrace</div><span class="duration">1.7 小時</span></div>
-          <div class="card-desc">純白地中海風商店街，可極近距離欣賞飛機起降，為旅程留下美麗結尾。</div>
-          <div class="card-footer"><div class="tags"><span class="tag eat">觀景</span><span class="tag nat">熱門</span></div><a href="https://www.google.com/maps/search/?api=1&query=瀨長島Umikaji+Terrace" target="_blank" class="map-a"><i class="ti ti-map-pin"></i>地圖</a></div>
         </div>
       </div>
     </div>
@@ -449,7 +455,7 @@ function getBotResponse(q) {
   q = q.toLowerCase();
   if (q.includes('穿') || q.includes('衣') || q.includes('天氣')) return "👕 10月的沖繩白天均溫約 26~31°C。建議穿著短袖、短褲，並攜帶墨鏡與防曬。Day 2 去北部古宇利島和海岸時海風較大，可幫長輩 or 小孩準備一件薄外套。";
   if (q.includes('電壓') || q.includes('插頭')) return "🔌 日本電壓是 100V，插頭形狀與台灣相同（雙平腳插頭），手機、行動電源充電器都可以直接插，不需帶轉換頭。";
-  if (q.includes('包車') || q.includes('交通')) return "🚐 行程安排：\n• Day 1：單軌電車 (Yui Rail)\n• Day 2：北部一日遊（全程包車）\n• Day 3：自行前往 / 計程車\n• Day 4：南部行程（全程包車，15:00 送達機場）";
+  if (q.includes('包車') || q.includes('交通')) return "🚐 行程安排：\n• Day 1：單軌電車 (Yui Rail)\n• Day 2：北部一日遊（全程包車）\n• Day 3：南部玉泉洞、瀨長島（全程包車）\n• Day 4：iias 購物（自理/計程車，距機場近，15:00 抵達機場）";
   if (q.includes('地圖') || q.includes('地點')) return "🗺️ 總覽地圖已經移到網頁的最下方囉！滑到底部就可以一覽全沖繩的行程景點分佈。";
   return "💡 收到！如果有更詳細的細節想確認，可以直接點擊各行程下方的「地圖」查看 Google Maps 最新營業與導航資訊。";
 }
