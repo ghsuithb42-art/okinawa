@@ -8,7 +8,7 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap');
     
-    /* 變數定義 */
+    /* 核心變數定義 */
     :root {
       --color-text-primary: #1a1a1a;
       --color-text-secondary: #666666;
@@ -28,11 +28,16 @@
     /* 主容器 */
     .oki { font-family: 'DM Sans', sans-serif; padding: 2rem 1rem 5rem; max-width: 660px; width: 100%; background: var(--color-background-primary); min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.02); }
 
-    .hero { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 0.5px solid var(--color-border-tertiary); }
+    .hero { margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 0.5px solid var(--color-border-tertiary); }
     .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 400; color: var(--color-text-primary); line-height: 1.2; letter-spacing: 0.2px; }
     .hero h1 em { font-style: italic; color: #1d9e75; }
     .hero-sub { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; flex-wrap: wrap; gap: 8px; }
     .hero-dates { font-size: 13px; color: var(--color-text-secondary); letter-spacing: 0.6px; text-transform: uppercase; }
+    
+    /* 頁尾地圖樣式 */
+    .hero-map-container { width: 100%; height: 380px; border-radius: var(--border-radius-lg); overflow: hidden; border: 0.5px solid var(--color-border-tertiary); margin-top: 2.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+    .hero-map-container iframe { width: 100%; height: 100%; border: 0; display: block; }
+
     .weather-pill { display: inline-flex; align-items: center; gap: 6px; padding: 7px 13px; border: 0.5px solid var(--color-border-tertiary); border-radius: 20px; font-size: 13px; color: var(--color-text-secondary); cursor: pointer; background: none; font-family: 'DM Sans', sans-serif; transition: background 0.15s; }
     .weather-pill:hover { background: var(--color-background-secondary); }
     .weather-pill i { font-size: 16px; color: #1d9e75; }
@@ -64,8 +69,6 @@
     .tbtn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px; padding: 10px 14px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); background: none; color: var(--color-text-secondary); font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; transition: background 0.15s, color 0.15s; text-decoration: none; }
     .tbtn i { font-size: 16px; }
     .tbtn:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
-    .tbtn.map-all { border-color: #1d9e75; color: #1d9e75; font-weight: 500; }
-    .tbtn.map-all:hover { background: #e1f5ee; color: #0f6e56; }
 
     .rate-panel { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 16px 18px; margin-bottom: 1.8rem; display: none; }
     .rate-panel.open { display: block; animation: fd 0.2s; }
@@ -84,7 +87,7 @@
     .ntab { background: none; border: none; padding: 11px 0; margin-right: 26px; font-size: 14px; color: var(--color-text-secondary); font-family: 'DM Sans', sans-serif; cursor: pointer; position: relative; white-space: nowrap; transition: color 0.15s; }
     .ntab::after { content: ''; position: absolute; bottom: -0.5px; left: 0; right: 0; height: 1.5px; background: transparent; transition: background 0.15s; }
     .ntab.active { color: var(--color-text-primary); font-weight: 500; }
-    .ntab.active::after { background: var(--text-primary); }
+    .ntab.active::after { background: var(--color-text-primary); }
 
     .panel { display: none; }
     .panel.active { display: block; animation: fd 0.25s; }
@@ -144,9 +147,9 @@
     .ai-trigger-btn { width: 56px; height: 56px; border-radius: 50%; background: #1d9e75; border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(29, 158, 117, 0.3); transition: transform 0.2s, background 0.2s; }
     .ai-trigger-btn:hover { transform: scale(1.05); background: #178260; }
     .ai-trigger-btn i { font-size: 26px; }
-    .ai-window { position: absolute; bottom: 70px; right: 0; width: 360px; height: 500px; background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); box-shadow: 0 8px 30px rgba(0,0,0,0.1); display: flex; flex-direction: column; overflow: hidden; opacity: 0; transform: translateY(15px); pointer-events: none; transition: opacity 0.25s, transform 0.25s; }
+    .ai-window { position: absolute; bottom: 70px; right: 0; width: 360px; height: 480px; background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); box-shadow: 0 8px 30px rgba(0,0,0,0.1); display: flex; flex-direction: column; overflow: hidden; opacity: 0; transform: translateY(15px); pointer-events: none; transition: opacity 0.25s, transform 0.25s; }
     .ai-window.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
-    @media (max-width: 400px) { .ai-window { width: calc(100vw - 32px); right: -8px; height: 80vh; } }
+    @media (max-width: 400px) { .ai-window { width: calc(100vw - 32px); right: -8px; height: 75vh; } }
     .ai-header { background: #1d9e75; color: white; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; }
     .ai-header-info { display: flex; align-items: center; gap: 8px; }
     .ai-header-info i { font-size: 20px; }
@@ -169,7 +172,7 @@
 <body>
 
 <div class="oki">
-  <h2 class="sr-only">Okinawa Friends & Family Trip 2026，10月16日至19日，包含航班、氣候、匯率與每日景點時間表。</h2>
+  <h2 class="sr-only">Okinawa Friends & Family Trip 2026，10月16日至19日，包含全功能嵌入式地圖與行程。</h2>
 
   <div class="hero">
     <h1>Okinawa<br><em>Friends & Family Trip</em> 2026</h1>
@@ -187,25 +190,24 @@
       <div class="wx-card"><div class="wx-day">10/18 購物</div><div class="wx-ico">☀️</div><div class="wx-temp">25–29°C</div><div class="wx-desc">晴朗舒適</div></div>
       <div class="wx-card"><div class="wx-day">10/19 南部</div><div class="wx-ico">🌤</div><div class="wx-temp">26–30°C</div><div class="wx-desc">晴，微風</div></div>
     </div>
-    <div class="wx-note">10月沖繩仍屬夏末，均溫約26–30°C，濕度稍高。防曬不可少；北部海岸風大，薄外套備用。</div>
+    <div class="wx-note">10月沖繩仍屬夏末，均溫約26–30°C。紫外線強，防曬不可少；北部海岸風大，薄外套備用。</div>
   </div>
 
   <div class="flights">
-    <a href="https://www.google.com/maps/search/?api=1&query=那霸機場" target="_blank" class="fl">
+    <div class="fl">
       <div class="fl-label"><i class="ti ti-plane-departure" aria-hidden="true"></i>去程</div>
       <div class="fl-route">台北 <span>→</span> 沖繩</div>
       <div class="fl-time">10/16  13:30 → 15:55</div>
-    </a>
-    <a href="https://www.google.com/maps/search/?api=1&query=那霸機場" target="_blank" class="fl">
+    </div>
+    <div class="fl">
       <div class="fl-label"><i class="ti ti-plane-arrival" aria-hidden="true"></i>回程</div>
       <div class="fl-route">沖繩 <span>→</span> 台北</div>
       <div class="fl-time">10/19  16:55 → 17:30</div>
-    </a>
+    </div>
   </div>
 
   <div class="tools">
-    <a href="https://www.google.com/maps/search/?api=1&query=第一牧志公設市場+古宇利島心形岩+美麗海水族館+美國村+iias沖繩豐崎+Ashibinaa+玉泉洞+DMM水族館+瀨長島" target="_blank" class="tbtn map-all"><i class="ti ti-map-pin" aria-hidden="true"></i>Google Maps 總覽地圖</a>
-    <button class="tbtn" onclick="toggleRate()"><i class="ti ti-currency-yen" aria-hidden="true"></i>台幣 ↔ 日圓</button>
+    <button class="tbtn" style="width:100%" onclick="toggleRate()"><i class="ti ti-currency-yen" aria-hidden="true"></i>台幣 ↔ 日圓匯率換算</button>
   </div>
 
   <div class="rate-panel" id="ratePanel">
@@ -250,9 +252,9 @@
       <div class="tl-item">
         <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">17:00<br>18:30</div></div>
         <div class="tl-card">
-          <div class="card-top"><div class="card-name"><i class="ti ti-shopping-bag" aria-hidden="true"></i>國際通</div><span class="duration">1.5 小時</span></div>
+          <div class="card-top"><div class="card-name"><i class="ti ti-shopping-bag" aria-hidden="true"></i>國際通商店街</div><span class="duration">1.5 小時</span></div>
           <div class="card-desc">約1.6公里長的熱鬧商店街，琉球玻璃、泡盛、黑糖、藍染一次掃齊。</div>
-          <div class="card-footer"><div class="tags"><span class="tag shp">購物</span><span class="tag eat">美食</span></div><a href="https://www.google.com/maps/search/?api=1&query=那霸國際通" target="_blank" class="map-a"><i class="ti ti-map-pin"></i>地圖</a></div>
+          <div class="card-footer"><div class="tags"><span class="tag shp">購物</span><span class="tag eat">美食</span></div><a href="https://www.google.com/maps/search/?api=1&query=那霸國際通商店街" target="_blank" class="map-a"><i class="ti ti-map-pin"></i>地圖</a></div>
         </div>
       </div>
       <div class="tl-connector"><div class="tl-conn-left"><div class="tl-conn-line"></div></div></div>
@@ -283,7 +285,7 @@
         <div class="tl-card">
           <div class="card-top"><div class="card-name"><i class="ti ti-heart" aria-hidden="true"></i>古宇利島・心形礁石</div><span class="duration">1 小時</span></div>
           <div class="card-desc">戀愛聖地，過橋免費。早上人少海色最美，心形礁石拍照後可沿海岸漫步。</div>
-          <div class="card-footer"><div class="tags"><span class="tag nat">自然</span><span class="tag cul">熱門</span></div><a href="https://www.google.com/maps/search/?api=1&query=古宇利島+心形岩" target="_blank" class="map-a"><i class="ti ti-map-pin"></i>地圖</a></div>
+          <div class="card-footer"><div class="tags"><span class="tag nat">自然</span><span class="tag cul">熱門</span></div><a href="https://www.google.com/maps/search/?api=1&query=古宇利島心形岩" target="_blank" class="map-a"><i class="ti ti-map-pin"></i>地圖</a></div>
         </div>
       </div>
       <div class="tl-connector"><div class="tl-conn-left"><div class="tl-conn-line"></div></div></div>
@@ -294,7 +296,7 @@
         <div class="tl-card">
           <div class="card-top"><div class="card-name"><i class="ti ti-ripple" aria-hidden="true"></i>美麗海水族館</div><span class="duration">2.5 小時</span></div>
           <div class="card-desc">世界頂級「黑潮之海」壓克力水槽，鯨鯊與鬼蝠魟近在眼前，震撼難忘。</div>
-          <div class="card-footer"><div class="tags"><span class="tag nat">水族館</span><span class="tag cul">必訪</span></div><a href="https://www.google.com/maps/search/?api=1&query=美麗海水族館" target="_blank" class="map-a"><i class="ti ti-map-pin"></i>地圖</a></div>
+          <div class="card-footer"><div class="tags"><span class="tag nat">水族館</span><span class="tag cul">必訪</span></div><a href="https://www.google.com/maps/search/?api=1&query=沖繩美麗海水族館" target="_blank" class="map-a"><i class="ti ti-map-pin"></i>地圖</a></div>
         </div>
       </div>
       <div class="tl-connector"><div class="tl-conn-left"><div class="tl-conn-line"></div></div></div>
@@ -335,7 +337,7 @@
         <div class="tl-card">
           <div class="card-top"><div class="card-name"><i class="ti ti-tag" aria-hidden="true"></i>Outlet Mall Ashibinaa</div><span class="duration">2.5 小時</span></div>
           <div class="card-desc">沖繩唯一Outlet，各大歐美、運動知名品牌齊聚，回程前理想補給站。</div>
-          <div class="card-footer"><div class="tags"><span class="tag shp">Outlet</span><span class="tag cul">折扣</span></div><a href="https://www.google.com/maps/search/?api=1&query=Okinawa+Outlet+Mall+Ashibinaa" target="_blank" class="map-a"><i class="ti ti-map-pin"></i>地圖</a></div>
+          <div class="card-footer"><div class="tags"><span class="tag shp">Outlet</span><span class="tag cul">折扣</span></div><a href="https://www.google.com/maps/search/?api=1&query=沖繩Outlet+Mall+Ashibinaa" target="_blank" class="map-a"><i class="ti ti-map-pin"></i>地圖</a></div>
         </div>
       </div>
     </div>
@@ -352,9 +354,9 @@
       <div class="tl-item">
         <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">08:30<br>10:00</div></div>
         <div class="tl-card">
-          <div class="card-top"><div class="card-name"><i class="ti ti-mountain" aria-hidden="true"></i>玉泉洞</div><span class="duration">1.5 小時</span></div>
+          <div class="card-top"><div class="card-name"><i class="ti ti-mountain" aria-hidden="true"></i>沖繩世界文化王國・玉泉洞</div><span class="duration">1.5 小時</span></div>
           <div class="card-desc">沖繩最大鐘乳石洞。石筍林立、地底湖泊，燈光映照如夢似幻。</div>
-          <div class="card-footer"><div class="tags"><span class="tag nat">自然</span><span class="tag cul">奇景</span></div><a href="https://www.google.com/maps/search/?api=1&query=沖繩世界文化王國+玉泉洞" target="_blank" class="map-a"><i class="ti ti-map-pin"></i>地圖</a></div>
+          <div class="card-footer"><div class="tags"><span class="tag nat">自然</span><span class="tag cul">奇景</span></div><a href="https://www.google.com/maps/search/?api=1&query=沖繩玉泉洞" target="_blank" class="map-a"><i class="ti ti-map-pin"></i>地圖</a></div>
         </div>
       </div>
       <div class="tl-connector"><div class="tl-conn-left"><div class="tl-conn-line"></div></div></div>
@@ -364,8 +366,8 @@
         <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">11:30<br>13:00</div></div>
         <div class="tl-card">
           <div class="card-top"><div class="card-name"><i class="ti ti-fish" aria-hidden="true"></i>DMM Kariyushi 水族館</div><span class="duration">1.5 小時</span></div>
-          <div class="card-desc">沉浸式數位科技水族館，融合真實生物與互動投影投影。</div>
-          <div class="card-footer"><div class="tags"><span class="tag nat">水族館</span><span class="tag art">數位技術</span></div><a href="https://www.google.com/maps/search/?api=1&query=DMM+Kariyushi+Aquarium" target="_blank" class="map-a"><i class="ti ti-map-pin"></i>地圖</a></div>
+          <div class="card-desc">沉浸式數位科技水族館，融合真實生物與互動投影。</div>
+          <div class="card-footer"><div class="tags"><span class="tag nat">水族館</span><span class="tag art">數位技術</span></div><a href="https://www.google.com/maps/search/?api=1&query=DMM+Kariyushi+水族館" target="_blank" class="map-a"><i class="ti ti-map-pin"></i>地圖</a></div>
         </div>
       </div>
       <div class="tl-connector"><div class="tl-conn-left"><div class="tl-conn-line"></div></div></div>
@@ -382,6 +384,10 @@
     </div>
   </div>
 
+  <div class="hero-map-container">
+    <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1TdvNDF4hpYE8yXhmcg_eEHpTthX7b_Q&ehbc=2E312F" width="640" height="480" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+
 </div>
 
 <div class="ai-chat-wrapper">
@@ -392,7 +398,7 @@
       <button class="ai-close-btn" onclick="toggleAiChat()"><i class="ti ti-x"></i></button>
     </div>
     <div class="ai-messages" id="aiMessages">
-      <div class="ai-msg bot">👋 嗨！我是你們的沖繩旅遊小助手。點擊頁首的「Google Maps 總覽地圖」可以一次看見所有景點喔！有任何問題也可以問我。</div>
+      <div class="ai-msg bot">👋 嗨！我是你們的沖繩旅遊小助手。總覽地圖已經幫大家整理在「網頁最下方」囉！有任何行程問題隨時問我！</div>
     </div>
     <div class="ai-suggestions">
       <div class="ai-suggest-tag" onclick="askAi('10月去沖繩怎麼穿衣服？')">👕 10月穿搭建議</div>
@@ -441,11 +447,11 @@ function appendMessage(t, s) {
 }
 function getBotResponse(q) {
   q = q.toLowerCase();
-  if (q.includes('穿') || q.includes('衣') || q.includes('天氣')) return "👕 10月的沖繩白天均溫約 26~31°C。建議穿著短袖、短褲，並攜帶墨鏡與防曬。Day 2 去北部古宇利島和海岸時海風較大，可幫長輩或小孩準備一件薄外套。";
+  if (q.includes('穿') || q.includes('衣') || q.includes('天氣')) return "👕 10月的沖繩白天均溫約 26~31°C。建議穿著短袖、短褲，並攜帶墨鏡與防曬。Day 2 去北部古宇利島和海岸時海風較大，可幫長輩 or 小孩準備一件薄外套。";
   if (q.includes('電壓') || q.includes('插頭')) return "🔌 日本電壓是 100V，插頭形狀與台灣相同（雙平腳插頭），手機、行動電源充電器都可以直接插，不需帶轉換頭。";
   if (q.includes('包車') || q.includes('交通')) return "🚐 行程安排：\n• Day 1：單軌電車 (Yui Rail)\n• Day 2：北部一日遊（全程包車）\n• Day 3：自行前往 / 計程車\n• Day 4：南部行程（全程包車，15:00 送達機場）";
-  if (q.includes('地圖') || q.includes('地點')) return "🗺️ 已經幫你修正了所有地點的標記！現在點擊行程內的地圖都能確實跳轉。另外，點擊網頁上方的「Google Maps 總覽地圖」更可以一次把所有景點在同一張地圖上秀出來喔！";
-  return "💡 收到！如果有更詳細的細節想確認，可以直接點擊各行程下方的「地圖」查看 Google Maps 最新營業資訊。";
+  if (q.includes('地圖') || q.includes('地點')) return "🗺️ 總覽地圖已經移到網頁的最下方囉！滑到底部就可以一覽全沖繩的行程景點分佈。";
+  return "💡 收到！如果有更詳細的細節想確認，可以直接點擊各行程下方的「地圖」查看 Google Maps 最新營業與導航資訊。";
 }
 </script>
 </body>
